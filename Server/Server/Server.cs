@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using Core;
 
 namespace Server;
 
@@ -10,6 +9,10 @@ public class Server
 {
     string localAddress;
     Socket listenSocket;
+
+
+    List<Client> clients = new();
+
 
 
     public void Instantiate()
@@ -33,25 +36,19 @@ public class Server
         {
             Socket acceptedSocket = await listenSocket.AcceptAsync();
 
-            _ = Task.Run(() => HandleClient(acceptedSocket));
+            HandleNewClient(acceptedSocket);
         }
     }
 
 
 
-    public async Task HandleClient(Socket acceptedSocket)
+    public void HandleNewClient(Socket socket)
     {
-
-
-        Task receiveTask = ReceiveMessagesAsync(socket);
-        Task sendTask = SendMessagesAsync(socket);
-
-        await Task.WhenAny(receiveTask, sendTask);
-
-        socket.Shutdown(SocketShutdown.Both);
-        socket.Close();
+        Client client = new Client();
+        clients.Add(client);
+        client.socket = socket;
+        _ = Task.Run(() => client.reciever.Recieve(socket));
     }
-
 
 
 }
