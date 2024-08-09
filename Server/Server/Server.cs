@@ -13,7 +13,7 @@ public class Server
 
 
     public List<Client> clients = new();
-
+    public Action<Client> OnClientAccepted = _ => { };
 
 
     public void Instantiate()
@@ -40,18 +40,12 @@ public class Server
         {
             Socket acceptedSocket = await listenSocket.AcceptAsync();
 
-            HandleNewClient(acceptedSocket);
+            Client client = new Client();
+            client.socket = acceptedSocket;
+            clients.Add(client);
+            OnClientAccepted(client);
+            _ = Task.Run(() => client.reciever.RecieveMessageAsync(acceptedSocket));
         }
-    }
-
-
-
-    public void HandleNewClient(Socket socket)
-    {
-        Client client = new Client();
-        clients.Add(client);
-        client.socket = socket;
-        _ = Task.Run(() => client.reciever.RecieveMessageAsync(socket));
     }
 
 
