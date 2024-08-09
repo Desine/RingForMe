@@ -9,7 +9,7 @@ namespace Server;
 public class Server
 {
     public string localAddress;
-    public Socket listenSocket;
+    public Socket listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
 
     public List<Client> clients = new();
@@ -32,8 +32,6 @@ public class Server
         IPEndPoint localIPEndPoint = new IPEndPoint(IPAddress.Any, port);
         listenSocket.Bind(localIPEndPoint);
         listenSocket.Listen(10);
-
-        listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
     }
 
     public async Task Accept()
