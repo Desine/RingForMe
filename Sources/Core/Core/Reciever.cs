@@ -14,7 +14,7 @@ public class Receiver
 {
 
 
-    public Action<string> OnRecieved = _ => {};
+    public Action<string> OnReceived = _ => {};
 
 
     public async Task ReceiveMessageAsync(Socket socket)
@@ -27,7 +27,7 @@ public class Receiver
             if (receiveLength > 0)
             {
                 string message = Encoding.ASCII.GetString(receiveBuffer, 0, receiveLength);
-                OnRecieved(message);
+                OnReceived(message);
             }
         }
     }
