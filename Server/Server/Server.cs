@@ -60,15 +60,21 @@ public class Server
 
 
 
-    public void SendMessage(string clientName, Core.WebDataProtocol.Message message)
+    public void SendMessageToClient(string clientName, string message)
     {
         foreach (var client in clients)
         {
             if (client.name == clientName)
             {
-                string strMessage = JsonSerializer.Serialize(message);
-                client.sender.SendMessage(client.socket, strMessage);
+                client.sender.SendMessage(client.socket, message);
             }
+        }
+    }
+    public void SendMessageToAllClients(string message)
+    {
+        foreach (var client in clients)
+        {
+            client.sender.SendMessage(client.socket, message);
         }
     }
 
