@@ -10,10 +10,10 @@ namespace Core;
 public class Sender
 {
 
-    public async Task SendMessageAsync(Socket socket, string message)
+    public void SendMessage(Socket socket, string message)
     {
         byte[] sendBuffer = Encoding.ASCII.GetBytes(message);
-        await socket.SendAsync(sendBuffer, SocketFlags.None);
+        _ = Task.Run(() => socket.SendAsync(sendBuffer, SocketFlags.None));
     }
 
 
