@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Core;
 
 
-internal class Reciever
+public class Reciever
 {
 
 

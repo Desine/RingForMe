@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Core;
 
-internal class Sender
+public class Sender
 {
 
-    static async Task SendMessagesAsync(Socket socket, string message)
+    async Task SendMessagesAsync(Socket socket, string message)
     {
         byte[] sendBuffer = Encoding.ASCII.GetBytes(message);
         await socket.SendAsync(sendBuffer, SocketFlags.None);
