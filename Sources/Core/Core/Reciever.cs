@@ -14,7 +14,7 @@ public class Reciever
 {
 
 
-    public Action<WebDataProtocol.Message> OnRecieved = _ => {};
+    public Action<string> OnRecieved = _ => {};
 
 
     public async Task RecieveMessageAsync(Socket socket)
@@ -27,7 +27,7 @@ public class Reciever
             if (receiveLength > 0)
             {
                 string message = Encoding.ASCII.GetString(receiveBuffer, 0, receiveLength);
-                OnRecieved(JsonSerializer.Deserialize<WebDataProtocol.Message>(message));
+                OnRecieved(message);
             }
         }
     }
