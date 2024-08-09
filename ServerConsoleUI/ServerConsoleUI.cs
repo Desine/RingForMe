@@ -8,13 +8,13 @@ _ = Task.Run(() => server.Accept());
 
 while (true)
 {
-    Console.WriteLine("Options:\b" +
+    Console.WriteLine("Options:\n" +
         "1 - Send message");
 
-    int choise = Console.Read();
+    string choise = Console.ReadLine();
     switch (choise)
     {
-        case 1:
+        case "1":
             SendMessage();
             break;
     }
@@ -30,7 +30,7 @@ void SendMessage()
     Console.Write("Message: ");
     string message = Console.ReadLine();
 
-    server.SendMessage("me", "Hi, me");
+    server.SendMessageToClient(recipient, message);
 
 }
 
