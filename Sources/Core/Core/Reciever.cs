@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 namespace Core;
 
 
-public class Reciever
+public class Receiver
 {
 
 
     public Action<string> OnRecieved = _ => {};
 
 
-    public async Task RecieveMessageAsync(Socket socket)
+    public async Task ReceiveMessageAsync(Socket socket)
     {
         while (true)
         {
