@@ -5,6 +5,15 @@ Server.Server server = new();
 server.Instantiate();
 _ = Task.Run(() => server.Accept());
 
+server.OnClientAccepted += Server_OnClientAccepted;
+void Server_OnClientAccepted(Server.Client client)
+{
+    client.reciever.OnRecieved += WriteRecievedMessage;
+}
+void WriteRecievedMessage(string message)
+{
+    Console.WriteLine(message);
+}
 
 while (true)
 {
@@ -31,8 +40,8 @@ void SendMessage()
     string message = Console.ReadLine();
 
     server.SendMessageToClient(recipient, message);
-
 }
+
 
 
 
