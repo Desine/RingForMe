@@ -8,11 +8,11 @@ _ = Task.Run(() => server.Accept());
 server.OnClientAccepted += Server_OnClientAccepted;
 void Server_OnClientAccepted(Server.Client client)
 {
-    client.reciever.OnRecieved += WriteRecievedMessage;
+    client.receiver.OnReceived += WriteReceivedMessage;
 }
-void WriteRecievedMessage(string message)
+void WriteReceivedMessage(string message)
 {
-    Console.WriteLine(message);
+    Console.WriteLine("Received message: " + message);
 }
 
 while (true)
