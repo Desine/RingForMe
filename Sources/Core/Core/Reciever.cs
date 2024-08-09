@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 namespace Core;
 
 
-public class Reciever
+public class Receiver
 {
 
 
-    public Action<WebDataProtocol.Message> OnRecieved = _ => {};
+    public Action<string> OnRecieved = _ => {};
 
 
-    public async Task RecieveMessageAsync(Socket socket)
+    public async Task ReceiveMessageAsync(Socket socket)
     {
         while (true)
         {
@@ -27,7 +27,7 @@ public class Reciever
             if (receiveLength > 0)
             {
                 string message = Encoding.ASCII.GetString(receiveBuffer, 0, receiveLength);
-                OnRecieved(JsonSerializer.Deserialize<WebDataProtocol.Message>(message));
+                OnRecieved(message);
             }
         }
     }
