@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 
 namespace Server;
 
@@ -27,6 +28,11 @@ public class Server
             }
         }
 
+        int port = 2222;
+        IPEndPoint localIPEndPoint = new IPEndPoint(IPAddress.Any, port);
+        listenSocket.Bind(localIPEndPoint);
+        listenSocket.Listen(10);
+
         listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
     }
 
@@ -47,8 +53,25 @@ public class Server
         Client client = new Client();
         clients.Add(client);
         client.socket = socket;
-        _ = Task.Run(() => client.reciever.Recieve(socket));
+        _ = Task.Run(() => client.reciever.RecieveMessageAsync(socket));
     }
+
+
+
+
+
+    public void SendMessage(string clientName, Core.WebDataProtocol.Message message)
+    {
+        foreach (var client in clients)
+        {
+            if (client.name == clientName)
+            {
+                string strMessage = JsonSerializer.Serialize(message);
+                client.sender.SendMessage(client.socket, strMessage);
+            }
+        }
+    }
+
 
 
 }
