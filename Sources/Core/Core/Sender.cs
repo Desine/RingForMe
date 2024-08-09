@@ -10,7 +10,7 @@ namespace Core;
 public class Sender
 {
 
-    public async Task SendMessagesAsync(Socket socket, string message)
+    public async Task SendMessageAsync(Socket socket, string message)
     {
         byte[] sendBuffer = Encoding.ASCII.GetBytes(message);
         await socket.SendAsync(sendBuffer, SocketFlags.None);
