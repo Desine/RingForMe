@@ -8,11 +8,11 @@ namespace Server;
 
 public class Server
 {
-    string localAddress;
-    Socket listenSocket;
+    public string localAddress;
+    public Socket listenSocket;
 
 
-    List<Client> clients = new();
+    public List<Client> clients = new();
 
 
 
