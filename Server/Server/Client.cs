@@ -11,7 +11,7 @@ public class Client
 {
     public string name;
     public Socket socket;
-    public Core.Reciever reciever = new();
+    public Core.Receiver receiver = new();
     public Core.Sender sender = new();
 
 
