@@ -44,7 +44,7 @@ public class Server
             client.socket = acceptedSocket;
             clients.Add(client);
             OnClientAccepted(client);
-            _ = Task.Run(() => client.reciever.RecieveMessageAsync(acceptedSocket));
+            _ = Task.Run(() => client.receiver.ReceiveMessageAsync(acceptedSocket));
         }
     }
 
