@@ -17,7 +17,7 @@ public class Reciever
     public Action<WebDataProtocol.Message> OnRecieved = _ => {};
 
 
-    public async Task Recieve(Socket socket)
+    public async Task RecieveMessageAsync(Socket socket)
     {
         while (true)
         {
