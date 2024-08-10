@@ -27,7 +27,7 @@ public class Client
     public async Task ConnectToServer(IPEndPoint iPEndPoint)
     {
         await clientSocket.ConnectAsync(server.ipEndPoint);
-        _ = Task.Run(() => server.reciever.RecieveMessageAsync(server.socket));
+        _ = Task.Run(() => server.receiver.ReceiveMessageAsync(server.socket));
     }
 
 
