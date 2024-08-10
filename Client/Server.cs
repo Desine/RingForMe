@@ -12,7 +12,7 @@ public class Server
 {
     public IPEndPoint ipEndPoint;
     public Socket socket;
-    public Core.Reciever reciever = new();
+    public Core.Receiver reciever = new();
     public Core.Sender sender = new();
 
 }
