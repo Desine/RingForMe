@@ -1,6 +1,8 @@
 ﻿
 
 
+using static Core.WebDataProtocol;
+
 Server.Server server = new();
 server.Instantiate();
 _ = Task.Run(() => server.Accept());
@@ -8,12 +10,16 @@ _ = Task.Run(() => server.Accept());
 server.OnClientAccepted += Server_OnClientAccepted;
 void Server_OnClientAccepted(Server.Client client)
 {
+    Console.WriteLine("Client connected");
     client.receiver.OnReceived += WriteReceivedMessage;
 }
 void WriteReceivedMessage(string message)
 {
     Console.WriteLine("Received message: " + message);
 }
+
+
+
 
 while (true)
 {
