@@ -1,15 +1,21 @@
 ﻿
 
 Client.Client client = new();
-_ = Task.Run(()=> client.ConnectToServer(client.server.ipEndPoint));
-
+_ = Task.Run(() => client.ConnectToServer(client.server.ipEndPoint));
+client.OnConnectedToServer += () =>
+{
+    Console.WriteLine("Connected to server");
+};
 
 
 while (true)
 {
     Console.WriteLine("Options:" +
         "\n1 - Send message" +
-        "\n2 - Serve info");
+        "\n2 - Server info" +
+        "\n3 - Change server address" +
+        "\n4 - Change server port" +
+        "\n5 - Connect to server");
 
     string choise = Console.ReadLine();
     switch (choise)
@@ -21,10 +27,10 @@ while (true)
             ServerInfo();
             break;
         case "3":
-            ChengeServerAdress();
+            ChangeServerAddress();
             break;
         case "4":
-            ChengeServerPort();
+            ChangeServerPort();
             break;
         case "5":
             ConnectToServer();
@@ -48,14 +54,14 @@ void ServerInfo()
     Console.WriteLine();
 }
 
-void ChengeServerAdress()
+void ChangeServerAddress()
 {
     Console.Write("Server adress: ");
     string address = Console.ReadLine();
     client.server.address = address;
 }
 
-void ChengeServerPort()
+void ChangeServerPort()
 {
     Console.Write("Server port: ");
     int port = int.Parse(Console.ReadLine());
@@ -63,6 +69,6 @@ void ChengeServerPort()
 }
 void ConnectToServer()
 {
-    client.ConnectToServer(client.server.ipEndPoint);
+    _ = Task.Run(() => client.ConnectToServer(client.server.ipEndPoint));
 }
 
