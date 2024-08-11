@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -16,5 +17,18 @@ public class Server
     public Socket socket;
     public Core.Receiver receiver = new();
     public Core.Sender sender = new();
+
+
+    public static Action OnConnectedToServer = () => { };
+
+
+    public async Task ConnectToServer(IPEndPoint iPEndPoint)
+    {
+        ipEndPoint = new IPEndPoint(IPAddress.Parse(address), port);
+        socket = new(ipEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+        await socket.ConnectAsync(ipEndPoint);
+        OnConnectedToServer();
+        _ = Task.Run(() => receiver.ReceiveMessageAsync(socket));
+    }
 
 }
