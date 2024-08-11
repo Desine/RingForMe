@@ -19,7 +19,7 @@ public class Server
     public Core.Sender sender = new();
 
 
-    public static Action OnConnectedToServer = () => { };
+    public Action OnConnectedToServer = () => { };
 
 
     public async Task ConnectToServer(IPEndPoint iPEndPoint)
