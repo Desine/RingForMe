@@ -1,12 +1,10 @@
 ﻿
 
-Client.Client client = new();
-_ = Task.Run(() => client.ConnectToServer(client.server.ipEndPoint));
-client.OnConnectedToServer += () =>
+Client.Client.server.OnConnectedToServer += () =>
 {
     Console.WriteLine("Connected to server");
 };
-client.server.receiver.OnRecieved += message => {
+Client.Client.server.receiver.OnRecieved += message => {
     Console.WriteLine("Received message: " + message);
 };
 
@@ -49,29 +47,29 @@ void SendMessage()
     Console.Write("Message: ");
     string message = Console.ReadLine();
 
-    client.server.sender.SendMessage(client.server.socket, message);
+    Client.Client.server.sender.SendMessage(Client.Client.server.socket, message);
 }
 
 void ServerInfo()
 {
-    Console.WriteLine("Server ip end point: "+client.server.ipEndPoint);
+    Console.WriteLine("Server ip end point: "+ Client.Client.server.ipEndPoint);
 }
 
 void ChangeServerAddress()
 {
     Console.Write("Server adress: ");
     string address = Console.ReadLine();
-    client.server.address = address;
+    Client.Client.server.address = address;
 }
 
 void ChangeServerPort()
 {
     Console.Write("Server port: ");
     int port = int.Parse(Console.ReadLine());
-    client.server.port = port;
+    Client.Client.server.port = port;
 }
 void ConnectToServer()
 {
-    _ = Task.Run(() => client.ConnectToServer(client.server.ipEndPoint));
+    _ = Task.Run(() => Client.Client.server.ConnectToServer(Client.Client.server.ipEndPoint));
 }
 
