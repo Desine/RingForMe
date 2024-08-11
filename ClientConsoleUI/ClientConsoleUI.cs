@@ -6,6 +6,9 @@ client.OnConnectedToServer += () =>
 {
     Console.WriteLine("Connected to server");
 };
+client.server.receiver.OnRecieved += message => {
+    Console.WriteLine("Received message: " + message);
+};
 
 
 while (true)
@@ -51,7 +54,7 @@ void SendMessage()
 
 void ServerInfo()
 {
-    Console.WriteLine();
+    Console.WriteLine("Server ip end point: "+client.server.ipEndPoint);
 }
 
 void ChangeServerAddress()
