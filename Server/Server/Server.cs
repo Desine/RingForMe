@@ -6,17 +6,17 @@ using System.Text.Json;
 
 namespace Server;
 
-public class Server
+public static class Server
 {
-    public string localAddress;
-    public Socket listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+    public static string localAddress;
+    public static Socket listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
 
-    public List<Client> clients = new();
-    public Action<Client> OnClientAccepted = _ => { };
+    public static List<Client> clients = new();
+    public static Action<Client> OnClientAccepted = _ => { };
 
 
-    public void Instantiate()
+    public static void Instantiate()
     {
         IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
         foreach (var ip in host.AddressList)
@@ -34,7 +34,7 @@ public class Server
         listenSocket.Listen(10);
     }
 
-    public async Task Accept()
+    public static async Task Accept()
     {
         while (true)
         {
@@ -52,17 +52,17 @@ public class Server
 
 
 
-    public void SendMessageToClient(string clientName, string message)
+    public static void SendMessageToClient(string clientName, string message)
     {
         foreach (var client in clients)
         {
-            if (client.name == clientName)
+            if (client.info.name == clientName)
             {
                 client.sender.SendMessage(client.socket, message);
             }
         }
     }
-    public void SendMessageToAllClients(string message)
+    public static void SendMessageToAllClients(string message)
     {
         foreach (var client in clients)
         {
