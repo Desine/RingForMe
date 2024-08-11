@@ -9,13 +9,15 @@ namespace Server;
 
 public class Client
 {
-    public string name;
     public Socket socket;
     public Core.Receiver receiver = new();
     public Core.Sender sender = new();
+    public Info info;
 
 
-
-
+    public struct Info
+    {
+        public string name;
+    }
 
 }
