@@ -9,6 +9,8 @@ namespace Server;
 public static class Server
 {
     public static string localAddress;
+    public static int port = 2222;
+    public static IPEndPoint localIPEndPoint = new IPEndPoint(IPAddress.Any, port);
     public static Socket listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
 
@@ -28,8 +30,6 @@ public static class Server
             }
         }
 
-        int port = 2222;
-        IPEndPoint localIPEndPoint = new IPEndPoint(IPAddress.Any, port);
         listenSocket.Bind(localIPEndPoint);
         listenSocket.Listen(10);
     }
