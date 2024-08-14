@@ -1,13 +1,11 @@
 ﻿
 
 
-using static Core.WebDataProtocol;
 
-Server.Server server = new();
-server.Instantiate();
-_ = Task.Run(() => server.Accept());
+Server.Server.Instantiate();
+_ = Task.Run(() => Server.Server.Accept());
 
-server.OnClientAccepted += Server_OnClientAccepted;
+Server.Server.OnClientAccepted += Server_OnClientAccepted;
 void Server_OnClientAccepted(Server.Client client)
 {
     Console.WriteLine("Client connected");
@@ -58,28 +56,29 @@ void SendMessageToClient()
     Console.Write("Message: ");
     string message = Console.ReadLine();
 
-    server.SendMessageToClient(recipient, message);
+    Server.Server.SendMessageToClient(recipient, message);
 }
 void SendMessageToAllClients()
 {
     Console.Write("Message: ");
     string message = Console.ReadLine();
 
-    server.SendMessageToAllClients(message);
+    Server.Server.SendMessageToAllClients(message);
 }
 
 void ConnectedClients()
 {
-    foreach (var client in server.clients)
+    foreach (var client in Server.Server.clients)
     {
-        Console.WriteLine("client namae: " + client.name);
-        Console.WriteLine("client socket: " + client.socket);
+        Console.WriteLine("client namae: " + client.info.name);
+        Console.WriteLine("client RemoteEndPoint: " + client.socket.RemoteEndPoint);
     }
 }
 void ServerInfo()
 {
-        Console.WriteLine("Server local address: " + server.localAddress);
-        Console.WriteLine("Server socket: " + server.listenSocket);
+        Console.WriteLine("Server local address: " + Server.Server.localAddress);
+        Console.WriteLine("Server port: " + Server.Server.port);
+        Console.WriteLine("Server local IP end point: " + Server.Server.localIPEndPoint);
 }
 
 
