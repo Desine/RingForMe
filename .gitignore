@@ -7,6 +7,7 @@
 **/net8.0/
 
 **/*.sln
+**/.editorconfig
 
 
 # User-specific files
