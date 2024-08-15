@@ -6,6 +6,8 @@
 # Generated environment
 **/net8.0/
 
+**/*.sln
+
 
 # User-specific files
 **/*.rsuser
