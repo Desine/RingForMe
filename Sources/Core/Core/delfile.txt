@@ -1,0 +1,1 @@
+this delfile is made for the sole purpose of deleting one folder and its contents from git repo
