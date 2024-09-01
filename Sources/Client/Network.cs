@@ -20,12 +20,20 @@ public class Network
     public Core.Receiver receiver = new();
     public Core.Sender sender = new();
 
+    public Action OnConnectedToServer = () => { };
+    public Action OnMessageReceived = () => { };
+
 
 
     public void ConnectToServer()
     {
-        _ = Task.Run(() => socket.ConnectAsync(ipEndPoint));
-        _ = Task.Run(() => receiver.ReceiveMessageAsync(socket));
+        _ = Task.Run(() => ConnectToServerAsync());
+    }
+    public async Task ConnectToServerAsync()
+    {
+        await socket.ConnectAsync(ipEndPoint);
+        OnConnectedToServer();
+        await receiver.ReceiveMessageAsync(socket);
     }
 
     public void SendMessage(string message)

@@ -10,14 +10,14 @@ public static class Daemon
 
     public static string write = "no";
 
-    private static void OnConnectedToServer()
+    private static void Network_OnConnectedToServer()
     {
         write = "connected to server";
     }
 
     public static void Run()
     {
-
+        network.OnConnectedToServer += Network_OnConnectedToServer;
         network.ConnectToServer();
 
 
@@ -31,7 +31,7 @@ public static class Daemon
         }
     }
 
-
+    public static void ConnectToServer() => network.ConnectToServer();
 
 
 

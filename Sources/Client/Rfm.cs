@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Tmds.DBus.Protocol;
 
 
 namespace Client;
@@ -6,7 +7,7 @@ namespace Client;
 public static class Rfm
 {
 
-
+    public const string daemonName = "rfm";
 
 
 
@@ -15,15 +16,18 @@ public static class Rfm
 
         if (args.Length == 0)
         {
-            Process.Start(new ProcessStartInfo
+            if (IsDaemonAlive() == false)
             {
-                FileName = Environment.ProcessPath,
-                Arguments = $"daemon &",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true,
-            });
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = Environment.ProcessPath,
+                    Arguments = $"daemon &",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true,
+                });
+            }
         }
         else if (args[0] == "daemon")
         {
@@ -39,10 +43,40 @@ public static class Rfm
                 case "con":
                     Console.WriteLine("Connecting to server");
                     break;
+                case "killd":
+                    KillDaemon();
+                    break;
                 default:
-                    Console.WriteLine("default");
+                    Console.WriteLine("default: args[0] = :" + args[0]);
                     break;
             }
         }
     }
+
+    public static bool IsDaemonAlive()
+    {
+        return Process.GetProcessesByName(daemonName).Length > 1;
+    }
+    public static void KillDaemon()
+    {
+        foreach (Process process in Process.GetProcessesByName(daemonName))
+        {
+            if (process == Process.GetCurrentProcess()) continue;
+
+            try
+            {
+                process.Kill();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error killing process: " + ex.Message);
+            }
+            finally
+            {
+                process.Close();
+            }
+        }
+    }
+
+
 }
