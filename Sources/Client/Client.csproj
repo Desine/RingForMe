@@ -12,9 +12,5 @@
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="dbus-sharp" Version="0.7.0" />
-    <PackageReference Include="Tmds.DBus.Protocol" Version="0.20.0" />
-  </ItemGroup>
 
 </Project>

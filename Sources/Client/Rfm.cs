@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using Tmds.DBus.Protocol;
+using System.IO.Pipes;
 
 
 namespace Client;
@@ -11,32 +11,16 @@ public static class Rfm
 
 
 
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
 
-        if (args.Length == 0)
-        {
-            if (IsDaemonAlive() == false)
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = Environment.ProcessPath,
-                    Arguments = $"daemon &",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = true,
-                });
-            }
-        }
-        else if (args[0] == "daemon")
-        {
-            Daemon.Run();
-        }
-        else
-        {
+        if (args.Length == 0) TryRunDaemon();
+        else {
             switch (args[0])
             {
+                case "daemon":
+                    Daemon.Run();
+                    break;
                 case "frds":
                     Console.WriteLine("You have no friends");
                     break;
@@ -46,12 +30,47 @@ public static class Rfm
                 case "killd":
                     KillDaemon();
                     break;
+                case "msg":
+                    if(args.Length < 2) Console.WriteLine("message contence?");
+                    else PipeMessage(args[1]);
+                    break;
                 default:
                     Console.WriteLine("default: args[0] = :" + args[0]);
                     break;
             }
         }
     }
+
+    private static void TryRunDaemon()
+    {
+        if (IsDaemonAlive()) Console.WriteLine("rfm Daemon is already alive");
+        else
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = Environment.ProcessPath,
+                Arguments = $"daemon &",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true,
+            });
+        }
+    }
+
+    private static void PipeMessage(string message)
+    {
+        using var namedPipe = new NamedPipeClientStream(".", "rfm.PipeMessage", PipeDirection.Out);
+        namedPipe.Connect();
+
+        using var writer = new StreamWriter(namedPipe);
+        writer.Write(message);
+    }
+
+
+
+
+
 
     public static bool IsDaemonAlive()
     {
