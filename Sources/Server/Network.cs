@@ -1,25 +1,28 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Server;
 
-public static class Server
+public class Network
 {
-    public static string localAddress;
-    public static int port = 2222;
-    public static IPEndPoint localIPEndPoint = new IPEndPoint(IPAddress.Any, port);
-    public static Socket listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+    public string localAddress;
+    public int port = 2222;
+    public IPEndPoint localIPEndPoint;
+    public Socket listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
 
-    public static List<Client> clients = new();
-    public static Action<Client> OnClientAccepted = _ => { };
+    public List<Client> clients = new();
+    public Action<Client> OnClientAccepted = _ => { };
 
 
-    public static void Instantiate()
+    public void Instantiate()
     {
+        localIPEndPoint = new IPEndPoint(IPAddress.Any, port);
         IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
         foreach (var ip in host.AddressList)
         {
@@ -34,7 +37,7 @@ public static class Server
         listenSocket.Listen(10);
     }
 
-    public static async Task Accept()
+    public async Task Accept()
     {
         while (true)
         {
@@ -52,7 +55,7 @@ public static class Server
 
 
 
-    public static void SendMessageToClient(string clientName, string message)
+    public void SendMessageToClient(string clientName, string message)
     {
         foreach (var client in clients)
         {
@@ -62,7 +65,7 @@ public static class Server
             }
         }
     }
-    public static void SendMessageToAllClients(string message)
+    public void SendMessageToAllClients(string message)
     {
         foreach (var client in clients)
         {
