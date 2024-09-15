@@ -24,6 +24,9 @@ public static class Daemon
 
 
         WriteAsync();
+
+
+        network.AcceptClientsAsync();
     }
 
     private static async void WriteAsync()
@@ -41,7 +44,7 @@ public static class Daemon
     {
         var tasks = new[]
         {
-            HandlePipeMessagesAsync(RfmS.daemonName + ".Hi", OnPipeMessage_Hi),
+            HandlePipeMessagesAsync(RfmS.daemonName + ".Hi", OnPipe_Hi),
         };
 
         await Task.WhenAll(tasks);
@@ -76,7 +79,7 @@ public static class Daemon
         }
     }
 
-    private static void OnPipeMessage_Hi(string message)
+    private static void OnPipe_Hi(string message)
     {
         write = message;
     }

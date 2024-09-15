@@ -37,7 +37,7 @@ public class Network
         listenSocket.Listen(10);
     }
 
-    public async Task Accept()
+    public async Task AcceptClientsAsync()
     {
         while (true)
         {
@@ -55,22 +55,22 @@ public class Network
 
 
 
-    public void SendMessageToClient(string clientName, string message)
+    public void SendMessageToClient(int clientId, string message)
     {
-        foreach (var client in clients)
+        clients.ForEach(client =>
         {
-            if (client.info.name == clientName)
+            if (client.info.id == clientId)
             {
                 client.sender.SendMessage(client.socket, message);
             }
-        }
+        });
     }
     public void SendMessageToAllClients(string message)
     {
-        foreach (var client in clients)
+        clients.ForEach(client =>
         {
             client.sender.SendMessage(client.socket, message);
-        }
+        });
     }
 
 

@@ -17,6 +17,7 @@ public class Client
 
     public struct Info
     {
+        public int id;
         public string name;
     }
 

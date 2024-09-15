@@ -74,7 +74,7 @@ public static class RfmS
             description = "Send message to the daemon via named pipe",
             function = (args) => {
             string output = "";
-            if(args.Length > 1) SendPipeMessageAsync(daemonName + "." + args[0], string.Join(' ', args.Skip(1)));
+            if(args.Length > 1) SendPipeMessage(daemonName + "." + args[0], string.Join(' ', args.Skip(1)));
             return output;
             }
         },
@@ -85,10 +85,10 @@ public static class RfmS
     {
         string[] argsForFunc = args.Skip(1).ToArray();
         string commandName = args.Length > 0 ? args[0] : "";
-        foreach (Command command in commands)
+        commands.ForEach(command =>
         {
-            if (commandName == command.name) Console.WriteLine(command.function(argsForFunc));
-        }
+            if (command.name == commandName) Console.WriteLine(command.function(argsForFunc));
+        });
     }
 
 
@@ -127,26 +127,5 @@ public static class RfmS
     }
 
 
-
-    private static void SendPipeMessageAsync(string pipeName, string message)
-    {
-        try
-        {
-            using var namedPipe = new NamedPipeClientStream(".", pipeName, PipeDirection.Out);
-
-            Console.WriteLine($"Connecting to pipe: {pipeName}");
-            namedPipe.Connect();
-            Console.WriteLine("Connected to pipe");
-
-            using var writer = new StreamWriter(namedPipe) { AutoFlush = true };
-
-            Console.WriteLine($"Sending message: {message}");
-            writer.WriteLine(message);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception in {nameof(SendPipeMessageAsync)}: {ex.Message}");
-        }
-    }
 
 }
