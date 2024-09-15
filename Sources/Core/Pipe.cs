@@ -1,7 +1,7 @@
 namespace Core;
 
 
-public class Pipe
+public static class Pipe
 {
     private static void SendMessage(string pipeName, string message)
     {
