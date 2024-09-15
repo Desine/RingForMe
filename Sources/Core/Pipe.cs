@@ -3,7 +3,7 @@ namespace Core;
 
 public static class Pipe
 {
-    private static void SendMessage(string pipeName, string message)
+    public static void SendMessage(string pipeName, string message)
     {
         using var namedPipe = new NamedPipeClientStream(".", pipeName, PipeDirection.Out);
 
@@ -16,7 +16,7 @@ public static class Pipe
     }
 
 
-    private static async Task ReceiveFunctionMessagesAsync(string pipeName, Action<string> function)
+    public static async Task ReceiveFunctionMessagesAsync(string pipeName, Action<string> function)
     {
         while (true)
         {
