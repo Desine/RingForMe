@@ -17,42 +17,77 @@ public static class RfmS
     public const string daemonName = "rfms";
 
 
-    public struct Command{
+    public struct Command
+    {
         public string name;
+        public string[] args;
         public string description;
-        public Func<string, string> function;
+        public Func<string[], string> function;
     }
     public static List<Command> commands = new(){
         new Command
         {
+            name = "\" \"",
+            description = "No args - run a daemon in background",
+            function = (args) => {
+            string output = "Daemon was alive: " + IsDaemonAlive();
+            TryRunDaemon();
+            output += "\nDaemon is alive: " + IsDaemonAlive();
+            return output;
+            }
+        },
+        new Command
+        {
             name = "help",
             description = "Displays help menu",
-            function = (input) => {
+            function = (args) => {
             string output = "It's help menu. What do you want?";
             foreach(var command in commands){
                 output += "\n   " + command.name + "   " + command.description;
-            }            
+            }
+            return output;
+            }
+        },
+        new Command
+        {
+            name = "daemon",
+            description = "Runs as daemon",
+            function = (args) => {
+            string output = "";
+            Daemon.RunAsync();
+            return output;
+            }
+        },
+        new Command
+        {
+            name = "daemon-kill",
+            description = "Kills the daemon",
+            function = (args) => {
+            string output = "";
+            KillDaemon();
+            return output;
+            }
+        },
+        new Command
+        {
+            name = "daemon-message",
+            description = "Send message to the daemon via named pipe",
+            function = (args) => {
+            string output = "";
+            if(args.Length > 1) SendPipeMessageAsync(daemonName + "." + args[0], string.Join(' ', args.Skip(1)));
             return output;
             }
         },
     };
 
 
-
     public static void Main(string[] args)
     {
-
-        if (args.Length == 0) TryRunDaemon();
-        else
+        string[] argsForFunc = args.Skip(1).ToArray();
+        string commandName = args.Length > 0 ? args[0] : "";
+        foreach (Command command in commands)
         {
-            switch (args[0])
-            {
-                case "daemon":
-                    {
-                        Daemon.Run();
-                        break;
-                    }
-            }
+            if (commandName == command.name) Console.WriteLine(command.function(argsForFunc));
         }
     }
 
@@ -87,38 +122,31 @@ public static class RfmS
     {
         foreach (Process process in Process.GetProcessesByName(daemonName))
         {
-            if (process == Process.GetCurrentProcess()) continue;
-
-            try
-            {
-                process.Kill();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error killing process: " + ex.Message);
-            }
-            finally
-            {
-                process.Close();
-            }
+            process.Kill();
         }
     }
 
 
 
-
-    private static async Task PipeMessage()
+    private static void SendPipeMessageAsync(string pipeName, string message)
     {
-        using var namedPipe = new NamedPipeServerStream("rfm.server.hi", PipeDirection.In);
-        while (true)
+        try
         {
-            namedPipe.WaitForConnection();
+            using var namedPipe = new NamedPipeClientStream(".", pipeName, PipeDirection.Out);
 
-            using var reader = new StreamReader(namedPipe);
+            Console.WriteLine($"Connecting to pipe: {pipeName}");
+            namedPipe.Connect();
+            Console.WriteLine("Connected to pipe");
+
+            using var writer = new StreamWriter(namedPipe) { AutoFlush = true };
+
+            Console.WriteLine($"Sending message: {message}");
+            writer.WriteLine(message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in {nameof(SendPipeMessageAsync)}: {ex.Message}");
         }
     }
-
-
-
 
 }
