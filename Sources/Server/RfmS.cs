@@ -74,7 +74,7 @@ public static class RfmS
             description = "Send message to the daemon via named pipe",
             function = (args) => {
             string output = "";
-            if(args.Length > 1) SendPipeMessage(daemonName + "." + args[0], string.Join(' ', args.Skip(1)));
+            if(args.Length > 1) Core.Pipe.SendMessage(daemonName + "." + args[0], string.Join(' ', args.Skip(1)));
             return output;
             }
         },
