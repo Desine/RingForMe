@@ -27,7 +27,7 @@ public static class RfmS
     public static List<Command> commands = new(){
         new Command
         {
-            name = "\" \"",
+            name = "",
             description = "No args - run a daemon in background",
             function = (args) => {
             string output = "Daemon was alive: " + IsDaemonAlive();
@@ -42,9 +42,9 @@ public static class RfmS
             description = "Displays help menu",
             function = (args) => {
             string output = "It's help menu. What do you want?";
-            foreach(var command in commands){
+            commands.ForEach(command => {
                 output += "\n   " + command.name + "   " + command.description;
-            }
+            });
             return output;
             }
         },
@@ -105,7 +105,7 @@ public static class RfmS
             Process.Start(new ProcessStartInfo
             {
                 FileName = Environment.ProcessPath,
-                Arguments = $"daemon &",
+                Arguments = "daemon &",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
